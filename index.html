@@ -1,5 +1,11 @@
-```mermaid
-  sequenceDiagram
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <pre class="mermaid">
+        sequenceDiagram
         browser->>server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
         server-->>browser: HTML-code
         browser->>server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
@@ -8,4 +14,13 @@
         server-->>browser: main.js
 
         Note over browser: browser starts <br> executing js-code that requests <br> JSON data from server 
-```
+       
+
+      
+    </pre>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@9/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true });
+    </script>
+  </body>
+</html>
