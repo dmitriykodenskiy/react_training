@@ -3,12 +3,16 @@
 ```mermaid
   sequenceDiagram
         browser->>server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
-        server-->>server: Redirect 302
-        server-->>browser: HTML-code
-        browser->>server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
-        server-->>browser: main.css
-        browser->>server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
-        server-->>browser: main.js
 
-        Note over browser: browser starts <br> executing js-code that requests <br> JSON data from server 
+        Note over server: notes are updated on server
+
+        server-->>browser: Redirect 302 to https://studies.cs.helsinki.fi/exampleapp/notes
+        browser->>server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+        server-->>browser: page reload
+        browser->>server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+        browser->>server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+        browser->>server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+        server-->>browser: main.css
+        server-->>browser: main.js
+        server-->>browser: data.json
 ```
