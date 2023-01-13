@@ -15,4 +15,11 @@
         server-->>browser: main.css
         server-->>browser: main.js
         server-->>browser: data.json
+
+  sequenceDiagram
+        browser->>server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+        Note over browser: notes list is updated <br> and rerendered
+        Note over server: notes are updated on server
+
 ```
