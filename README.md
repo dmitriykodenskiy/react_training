@@ -15,7 +15,11 @@
         server-->>browser: main.css
         server-->>browser: main.js
         server-->>browser: data.json
+```
 
+### The situation where the user goes to the single-page app version of the notes app at https://studies.cs.helsinki.fi/exampleapp/spa.
+
+```mermaid
   sequenceDiagram
         browser->>server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
 
