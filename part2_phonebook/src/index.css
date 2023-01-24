@@ -21,3 +21,21 @@ code {
 .person{
   margin: 10px 0;
 }
+.notification{
+  border: 1px solid green;
+  color: rgb(5, 92, 5);
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: rgb(118, 181, 23);
+  margin: 10px 0;
+}
+.error{
+  border: 1px solid rgb(175, 14, 2);
+  color: rgb(175, 14, 2);
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: rgb(234, 102, 100);
+  margin: 10px 0;
+}

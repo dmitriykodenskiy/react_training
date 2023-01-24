@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Form from './components/Form'
 import NumbersList from './components/NumbersList'
 import Search from './components/Search'
+import Notification from './components/Notification'
 import personsService from './services/persons'
 
 const App = () => {
@@ -9,6 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchValue, setSearchValue] = useState('')
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     personsService
@@ -42,16 +44,48 @@ const App = () => {
           personsService
           .change(duplicated.id, newItem)
           .then(response => {
+            setNotification({
+              text: `Changed ${newName}`,
+              type: 'notification'
+            })
+            setTimeout(() => {
+              setNotification(null)
+            }, 5000);
             setPersons(persons.map(item => item.id === duplicated.id ? response : item))
+          }).catch(error => {
+            console.error(error);
+            setNotification({
+              text: `Information of ${newName} has already been removed from server`,
+              type: 'error'
+            })
+            setTimeout(() => {
+              setNotification(null)
+            }, 5000);
           })
         }
       } else {
         personsService
             .create(newItem)
             .then(response => {
+              setNotification({
+                text: `Added ${newName}`,
+                type: 'notification'
+              })
+              setTimeout(() => {
+                setNotification(null)
+              }, 5000);
               setPersons([...persons, response])
               setNewName('')
               setNewNumber('')
+            }).catch(error => {
+              console.error(error);
+              setNotification({
+                text: `Information of ${newName} has already been removed from server`,
+                type: 'error'
+              })
+              setTimeout(() => {
+                setNotification(null)
+              }, 5000);
             })
       }
     }
@@ -95,6 +129,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={notification}/>
       <Search searchValue={searchValue} onChange={handleSearchInputChange}/>
       <h2>Add a new</h2>
       <Form addNumber={addNumber} handleNameInputChange={handleNameInputChange} handleNumberInputChange={handleNumberInputChange} newNumber={newNumber} newName={newName} />
