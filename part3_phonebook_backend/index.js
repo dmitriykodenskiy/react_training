@@ -65,7 +65,7 @@ app.get('/info', (request, response) => {
     response.send(result)
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/persons/:id', (request, response) => {
     const result = persons.find(person => person.id === Number(request.params.id))
     if (result) {
         response.send(result)
@@ -74,12 +74,12 @@ app.get('/api/persons/:id', (request, response) => {
     }
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/persons/:id', (request, response) => {
     persons = persons.filter(person => person.id !== Number(request.params.id))
     response.status(204).end()
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/persons', (request, response) => {
     const generateRandomId = (max) => {
         const random = Math.floor(Math.random() * max) + 1
         const duplicatedId = persons.find(person => person.id === random)
@@ -105,7 +105,7 @@ app.post('/api/persons', (request, response) => {
     generateRandomId(100)
 })
 
-app.get('/api/persons', (request, response) => {
+app.get('/persons', (request, response) => {
   response.json(persons)
 })
 
