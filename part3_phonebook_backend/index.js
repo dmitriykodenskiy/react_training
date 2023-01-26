@@ -2,8 +2,13 @@
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
+const cors = require('cors')
 
+// This Middlewere makes possible requests from different origin
+app.use(cors())
+// This Middlewere parses json and puts it to request.body
 app.use(express.json())
+// This Middlewere provides response logging in the console
 morgan.token('data', function (req, res) { 
     return JSON.stringify(req.body) 
 })
