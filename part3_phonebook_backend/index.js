@@ -8,6 +8,8 @@ const cors = require('cors')
 app.use(cors())
 // This Middlewere parses json and puts it to request.body
 app.use(express.json())
+// With this Middlewere whenever express gets an HTTP GET request it will first check if the build directory contains a file corresponding to the request's address. If a correct file is found, express will return it.
+app.use(express.static('build'))
 // This Middlewere provides response logging in the console
 morgan.token('data', function (req, res) { 
     return JSON.stringify(req.body) 
@@ -103,7 +105,7 @@ app.get('/api/persons', (request, response) => {
   response.json(persons)
 })
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
