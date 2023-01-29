@@ -128,7 +128,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>Phonebook</h1>
+      <h1>Phonebooks</h1>
       <Notification message={notification}/>
       <Search searchValue={searchValue} onChange={handleSearchInputChange}/>
       <h2>Add a new</h2>
