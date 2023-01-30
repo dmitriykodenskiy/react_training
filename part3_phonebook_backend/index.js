@@ -1,8 +1,9 @@
-
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
 const cors = require('cors')
+const Person = require('./models/person')
 
 // This Middlewere makes possible requests from different origin
 app.use(cors())
@@ -25,32 +26,6 @@ app.use(morgan(function (tokens, req, res) {
     ].join(' ')
   }))
 
-let persons = [
-    { 
-      "id": 1,
-      "name": "Arto Hellas", 
-      "number": "040-123456",
-      "toShow": true
-    },
-    { 
-      "id": 2,
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523",
-      "toShow": true
-    },
-    { 
-      "id": 3,
-      "name": "Dan Abramov", 
-      "number": "12-43-234345",
-      "toShow": true
-    },
-    { 
-      "id": 4,
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122",
-      "toShow": true
-    }
-]
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
@@ -66,47 +41,55 @@ app.get('/info', (request, response) => {
 })
 
 app.get('/persons/:id', (request, response) => {
-    const result = persons.find(person => person.id === Number(request.params.id))
-    if (result) {
-        response.send(result)
-    } else {
-        response.status(404).end()
-    }
+  Person.findById(request.params.id).then(person => {
+    response.json(person)
+  })
 })
 
-app.delete('/persons/:id', (request, response) => {
-    persons = persons.filter(person => person.id !== Number(request.params.id))
-    response.status(204).end()
+app.delete('/persons/:id', (request, response, next) => {
+  Person.findByIdAndRemove(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
+})
+
+app.put('/persons/:id', (request, response, next) => {
+  const changedPerson = request.body
+  Person.findByIdAndUpdate(request.params.id, changedPerson, {number: changedPerson.number})
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error => next(error))
 })
 
 app.post('/persons', (request, response) => {
-    const generateRandomId = (max) => {
-        const random = Math.floor(Math.random() * max) + 1
-        const duplicatedId = persons.find(person => person.id === random)
-        if (duplicatedId) {
-            generateRandomId(100)
-        } else {
-            const newPerson = request.body
-            if (!newPerson.name || !newPerson.number) {
-                return response.status(400).json({
-                    error: 'content missing'
-                })
-            } else if(persons.find(person => person.name === newPerson.name)) {
-                return response.status(400).json({
-                    error: 'name must be unique'
-                })
-            } else {
-                newPerson.id = random
-                persons = [...persons, newPerson]
-                response.json(persons)
-            }
-        }
-    }
-    generateRandomId(100)
+  const newPerson = request.body
+  if (!newPerson.name || !newPerson.number) {
+      return response.status(400).json({
+          error: 'content missing'
+      })
+  } 
+  // else if(persons.find(person => person.name === newPerson.name)) {
+  //     return response.status(400).json({
+  //         error: 'name must be unique'
+  //     })
+  // } 
+
+  const person = new Person({
+    "name": newPerson.name, 
+    "number": newPerson.number,
+    "toShow": true
+  })
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
 })
 
 app.get('/persons', (request, response) => {
-  response.json(persons)
+  Person.find({}).then(persons => {
+    response.json(persons)
+  })
 })
 
 const PORT = process.env.PORT || 3001

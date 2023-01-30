@@ -34,9 +34,7 @@ personSchema.set('toJSON', {
 const Person = mongoose.model('Person', personSchema)
 
 if (name && phoneNumber) {
-  console.log('add person');
   const person = new Person({
-    "id": Math.floor(Math.random() * 100),
     "name": name, 
     "number": phoneNumber,
     "toShow": true
