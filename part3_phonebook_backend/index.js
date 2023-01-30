@@ -55,8 +55,8 @@ app.delete('/persons/:id', (request, response, next) => {
 })
 
 app.put('/persons/:id', (request, response, next) => {
-  const changedPerson = request.body
-  Person.findByIdAndUpdate(request.params.id, changedPerson, {number: changedPerson.number})
+  const changedPerson = request.body;
+  Person.findByIdAndUpdate(request.params.id, changedPerson, {new: true})
     .then(updatedPerson => {
       response.json(updatedPerson)
     })
