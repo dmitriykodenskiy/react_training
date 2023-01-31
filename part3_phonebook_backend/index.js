@@ -75,8 +75,9 @@ app.delete('/persons/:id', (request, response, next) => {
 
 app.put('/persons/:id', (request, response, next) => {
   const changedPerson = request.body;
-  // There is one important detail regarding the use of the findByIdAndUpdate method. By default, the updatedPerson parameter of the event handler receives the original document without the modifications. We added the optional { new: true } parameter, which will cause our event handler to be called with the new modified document instead of the original.
-  Person.findByIdAndUpdate(request.params.id, changedPerson, {new: true})
+  // There is one important detail regarding the use of the findByIdAndUpdate method. By default, the updatedPerson parameter of the event handler receives the original document without the modifications. We added the optional { new: true } parameter, which will cause our event handler to be called with the new modified document instead of the original. 
+  // {runValidators: true, context: 'query'} parameters allow the Mongoo validators work with PUT request.
+  Person.findByIdAndUpdate(request.params.id, changedPerson, {new: true, runValidators: true, context: 'query'})
     .then(updatedPerson => {
       response.json(updatedPerson)
     })
@@ -84,7 +85,7 @@ app.put('/persons/:id', (request, response, next) => {
     // The error that is passed forwards is given to the next function as a parameter. If next was called without a parameter, then the execution would simply move onto the next route or middleware. If the next function is called with a parameter, then the execution will continue to the error handler middleware.
 })
 
-app.post('/persons', (request, response) => {
+app.post('/persons', (request, response, next) => {
   const newPerson = request.body
   if (!newPerson.name || !newPerson.number) {
       return response.status(400).json({
@@ -98,9 +99,11 @@ app.post('/persons', (request, response) => {
     "toShow": true
   })
   // Save new person to database and return it in the response
-  person.save().then(savedPerson => {
+  person.save()
+  .then(savedPerson => {
     response.json(savedPerson)
   })
+  .catch(error => next(error))
 })
 
 app.get('/persons', (request, response) => {
@@ -116,13 +119,16 @@ const unknownEndpoint = (request, response) => {
 }
 app.use(unknownEndpoint)
 
-// The error handler checks if the error is a CastError exception, in which case we know that the error was caused by an invalid object id for Mongo. In this situation, the error handler will send a response to the browser with the response object passed as a parameter. In all other error situations, the middleware passes the error forward to the default Express error handler.
+
 const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
+  // The error handler checks if the error is a CastError exception, in which case we know that the error was caused by an invalid object id for Mongo. In this situation, the error handler will send a response to the browser with the response object passed as a parameter. In all other error situations, the middleware passes the error forward to the default Express error handler.
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  } 
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
 
   next(error)
 }

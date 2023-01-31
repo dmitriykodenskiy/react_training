@@ -18,8 +18,22 @@ mongoose.connect(url)
 // Document databases like Mongo are schemaless, meaning that the database itself does not care about the structure of the data that is stored in the database. It is possible to store documents with completely different fields in the same collection.
 // The idea behind Mongoose is that the data stored in the database is given a schema at the level of the application that defines the shape of the documents stored in any given collection.
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
+  name: {
+    type: String,
+    minLength: 3,
+    required: true
+  },
+  number: {
+    type: String,
+    // Check custom validators here https://mongoosejs.com/docs/validation.html#custom-validators
+    validate: {
+      validator: function(v) {
+        return /^(\d{3}|\d{2})-\d+$/.test(v);
+      },
+      message: props => `${props.value} is not a valid phone number!`
+    },
+    required: true
+  },
   toShow: Boolean
 })
 
