@@ -33,16 +33,28 @@ app.get('/', (request, response) => {
 
 app.get('/info', (request, response) => {
     const requestDate = new Date()
-    const result = `
-    <div>Phonebook has info for ${persons.length} people</div>
-    <div>${requestDate}</div>
-    `
-    response.send(result)
+    Person.find({}).then(persons => {
+      const result = `
+        <div>Phonebook has info for ${persons.length} people</div>
+        <div>${requestDate}</div>
+      `
+      response.send(result)
+    })
+    
 })
 
 app.get('/persons/:id', (request, response) => {
-  Person.findById(request.params.id).then(person => {
-    response.json(person)
+  Person.findById(request.params.id)
+  .then(person => {
+    if (person) {
+      response.json(person)
+    } else {
+      response.status(404).end()
+    }
+  })
+  .catch(error => {
+    console.log(error);
+    response.status(400).send({ error: 'malformatted id' })
   })
 })
 
@@ -70,11 +82,6 @@ app.post('/persons', (request, response) => {
           error: 'content missing'
       })
   } 
-  // else if(persons.find(person => person.name === newPerson.name)) {
-  //     return response.status(400).json({
-  //         error: 'name must be unique'
-  //     })
-  // } 
 
   const person = new Person({
     "name": newPerson.name, 
