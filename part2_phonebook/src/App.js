@@ -53,14 +53,14 @@ const App = () => {
             }, 5000);
             setPersons(persons.map(item => item.id === duplicated.id ? response : item))
           }).catch(error => {
-            console.error(error);
+            console.error(error.response.data.error);
             setNotification({
-              text: `Information of ${newName} has already been removed from server`,
+              text: `${error.response.data.error}`,
               type: 'error'
             })
             setTimeout(() => {
               setNotification(null)
-            }, 5000);
+            }, 10000);
           })
         }
       } else {
@@ -78,14 +78,14 @@ const App = () => {
               setNewName('')
               setNewNumber('')
             }).catch(error => {
-              console.error(error);
+              console.error(error.response.data.error);
               setNotification({
-                text: `Information of ${newName} has already been removed from server`,
+                text: `${error.response.data.error}`,
                 type: 'error'
               })
               setTimeout(() => {
                 setNotification(null)
-              }, 5000);
+              }, 10000);
             })
       }
     }
