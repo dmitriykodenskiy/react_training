@@ -14,7 +14,7 @@ mongoose.connect(url)
     console.log('error connecting to MongoDB:', error.message)
   })
 
-// The schema tells Mongoose how the person objects are to be stored in the database. 
+// The schema tells Mongoose how the person objects are to be stored in the database.
 // Document databases like Mongo are schemaless, meaning that the database itself does not care about the structure of the data that is stored in the database. It is possible to store documents with completely different fields in the same collection.
 // The idea behind Mongoose is that the data stored in the database is given a schema at the level of the application that defines the shape of the documents stored in any given collection.
 const personSchema = new mongoose.Schema({

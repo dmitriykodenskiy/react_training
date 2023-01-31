@@ -17,8 +17,8 @@ app.use(express.json())
 // With this Middlewere whenever express gets an HTTP GET request it will first check if the build directory contains a file corresponding to the request's address. If a correct file is found, express will return it.
 app.use(express.static('build'))
 // This Middlewere provides response logging in the console
-morgan.token('data', function (req, res) { 
-    return JSON.stringify(req.body) 
+morgan.token('data', function (req, res) {
+    return JSON.stringify(req.body)
 })
 app.use(morgan(function (tokens, req, res) {
     return [
@@ -46,7 +46,6 @@ app.get('/info', (request, response) => {
       `
       response.send(result)
     })
-    
 })
 
 app.get('/persons/:id', (request, response) => {
@@ -75,7 +74,7 @@ app.delete('/persons/:id', (request, response, next) => {
 
 app.put('/persons/:id', (request, response, next) => {
   const changedPerson = request.body;
-  // There is one important detail regarding the use of the findByIdAndUpdate method. By default, the updatedPerson parameter of the event handler receives the original document without the modifications. We added the optional { new: true } parameter, which will cause our event handler to be called with the new modified document instead of the original. 
+  // There is one important detail regarding the use of the findByIdAndUpdate method. By default, the updatedPerson parameter of the event handler receives the original document without the modifications. We added the optional { new: true } parameter, which will cause our event handler to be called with the new modified document instead of the original.
   // {runValidators: true, context: 'query'} parameters allow the Mongoo validators work with PUT request.
   Person.findByIdAndUpdate(request.params.id, changedPerson, {new: true, runValidators: true, context: 'query'})
     .then(updatedPerson => {
@@ -94,7 +93,7 @@ app.post('/persons', (request, response, next) => {
   } 
 
   const person = new Person({
-    "name": newPerson.name, 
+    "name": newPerson.name,
     "number": newPerson.number,
     "toShow": true
   })
