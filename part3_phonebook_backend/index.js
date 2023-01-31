@@ -1,8 +1,13 @@
+// A module added to use .env file for using environmental variables like MONGODB_URI and PORT
 require('dotenv').config()
+// Express is a NodeJS library
 const express = require('express')
+// Morgan is a middleware, which displays response data in console depending on the configuration
 const morgan = require('morgan')
 const app = express()
+// This Middlewere makes possible requests from different origin
 const cors = require('cors')
+// Import a Person model from database
 const Person = require('./models/person')
 
 // This Middlewere makes possible requests from different origin
@@ -33,6 +38,7 @@ app.get('/', (request, response) => {
 
 app.get('/info', (request, response) => {
     const requestDate = new Date()
+    // When call Person.find({}) with empty object as an argument we will get the full list of persons
     Person.find({}).then(persons => {
       const result = `
         <div>Phonebook has info for ${persons.length} people</div>
@@ -44,6 +50,7 @@ app.get('/info', (request, response) => {
 })
 
 app.get('/persons/:id', (request, response) => {
+  // Find the person with the requested id in database
   Person.findById(request.params.id)
   .then(person => {
     if (person) {
@@ -68,11 +75,13 @@ app.delete('/persons/:id', (request, response, next) => {
 
 app.put('/persons/:id', (request, response, next) => {
   const changedPerson = request.body;
+  // There is one important detail regarding the use of the findByIdAndUpdate method. By default, the updatedPerson parameter of the event handler receives the original document without the modifications. We added the optional { new: true } parameter, which will cause our event handler to be called with the new modified document instead of the original.
   Person.findByIdAndUpdate(request.params.id, changedPerson, {new: true})
     .then(updatedPerson => {
       response.json(updatedPerson)
     })
     .catch(error => next(error))
+    // The error that is passed forwards is given to the next function as a parameter. If next was called without a parameter, then the execution would simply move onto the next route or middleware. If the next function is called with a parameter, then the execution will continue to the error handler middleware.
 })
 
 app.post('/persons', (request, response) => {
@@ -88,17 +97,39 @@ app.post('/persons', (request, response) => {
     "number": newPerson.number,
     "toShow": true
   })
+  // Save new person to database and return it in the response
   person.save().then(savedPerson => {
     response.json(savedPerson)
   })
 })
 
 app.get('/persons', (request, response) => {
+  // When call Person.find({}) with empty object as an argument we will get the full list of persons
   Person.find({}).then(persons => {
     response.json(persons)
   })
 })
 
+// This middleware must be executed after all routes. If none of the above routes is processed, this middleware is called. It means that the unknown endpoint was requested. After this middleware only the error hadling middlewares must be executed.
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+app.use(unknownEndpoint)
+
+// The error handler checks if the error is a CastError exception, in which case we know that the error was caused by an invalid object id for Mongo. In this situation, the error handler will send a response to the browser with the response object passed as a parameter. In all other error situations, the middleware passes the error forward to the default Express error handler.
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
+// this has to be the last loaded middleware.
+app.use(errorHandler)
+
+// watch the changes in the PORT
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
