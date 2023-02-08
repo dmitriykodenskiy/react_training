@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkxvbGl0YSIsImlkIjoiNjNlM2FiNzkwZjFmMDIxOTlmMWMxNmI1IiwiaWF0IjoxNjc1ODY5MDE5fQ.k-Yz-3s5gMPZCCf_V1YbYgtO5_e33j8X_t8lwe2aMU0
 
 {
-    "title": "Type wars",
-    "author": "Robert C. Martin",
+    "title": "Qua Wars",
+    "author": "Maria Quangerier",
     "url": "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
-    "likes": 2,
-    "userId":"63e38db6e5f979ee5575b985"
+    "likes": 2
 }

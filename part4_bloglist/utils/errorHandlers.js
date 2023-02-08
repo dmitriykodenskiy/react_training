@@ -12,6 +12,8 @@ const errorHandler = (error, request, response, next) => {
     // The error handler checks if the error is a CastError exception, in which case we know that the error was caused by an invalid object id for Mongo. In this situation, the error handler will send a response to the browser with the response object passed as a parameter. In all other error situations, the middleware passes the error forward to the default Express error handler.
     if (error.name === 'CastError') {
         return response.status(400).send({ error: 'malformatted id' })
+    } else if (error.name ===  'JsonWebTokenError') {
+        return response.status(400).json({ error: 'token missing or invalid' })
     }
 
     next(error)
