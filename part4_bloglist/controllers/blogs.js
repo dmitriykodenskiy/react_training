@@ -4,10 +4,10 @@ require('express-async-errors')
 
 // Import a Blog model from database
 const Blog = require('../models/blog')
-
+const User = require('../models/user')
 
 blogsRouter.get('/', async (request, response) => {
-    const blogs = await Blog.find({})
+    const blogs = await Blog.find({}).populate( 'user', { username: 1, name: 1 })
     response.json(blogs)
 })
 blogsRouter.get('/:id', async (request, response) => {
@@ -25,13 +25,23 @@ blogsRouter.get('/:id', async (request, response) => {
     }
 })
 blogsRouter.post('/', async (request, response) => {
-    const newBlog = new Blog(request.body)
+    const body = request.body
+    const user = await User.findById(body.userId)
+    const newBlog = new Blog({
+        title: body.title,
+        author: body.author,
+        url: body.url,
+        likes: body.likes,
+        user: user._id
+    })
     if (!newBlog.title || !newBlog.author) {
         return response.status(400).json({
             error: 'content missing'
         })
     }
     const savedBlog = await newBlog.save()
+    user.blogs = [...user.blogs, savedBlog._id]
+    await user.save()
     response.status(201).json(savedBlog)
 })
 

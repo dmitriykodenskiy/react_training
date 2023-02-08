@@ -3,6 +3,7 @@ const app = express()
 const cors = require('cors')
 // Routes
 const blogsRouter = require('./controllers/blogs')
+const usersRouter = require('./controllers/users')
 // Error handlers
 const { unknownEndpoint, errorHandler } = require('./utils/errorHandlers')
 
@@ -12,6 +13,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/api/blogs', blogsRouter)
+app.use('/api/users', usersRouter)
 
 // This has to be called after all routes
 app.use(unknownEndpoint)
