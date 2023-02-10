@@ -2,15 +2,12 @@ import { useState, useEffect } from 'react'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import LoginForm from './components/LoginForm'
+import BlogForm from './components/BlogForm'
 import BlogsSection from './components/BlogsSection'
 
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newBlogTitle, setBlogTitle] = useState('')
-  const [newBlogAuthor, setBlogAuthor] = useState('') 
-  const [newBlogUrl, setBlogUrl] = useState('') 
-  const [newBlogLikes, setBlogLikes] = useState('') 
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
@@ -54,36 +51,29 @@ const App = () => {
     }
   }
 
-  const addBlog = (event) => {
-    event.preventDefault()
-    const duplicated = blogs.find(item => item.title === newBlogTitle)
+  const addBlog = (blogObject) => {
+    const duplicated = blogs.find(item => item.title === blogObject.title)
 
     // Validation checks
-    if (!newBlogTitle) {
+    if (!blogObject.title) {
       alert(`Please enter a title`)
     }
-    if (!newBlogAuthor) {
+    if (!blogObject.author) {
       alert(`Please enter an Author name`)
     }
-    if (!newBlogUrl) {
+    if (!blogObject.url) {
       alert(`Please enter URL`)
     }
 
     // Update blogs
-    if (newBlogTitle && newBlogAuthor && newBlogUrl) {
-      const newItem = {
-        title: newBlogTitle, 
-        author: newBlogAuthor, 
-        url: newBlogUrl,
-        likes: newBlogLikes
-      }
+    if (blogObject.title && blogObject.author && blogObject.url) {
       if (duplicated) {
-        if(window.confirm(`${newBlogTitle} is already added to phonebook, replace the old number with the new one?`)){
+        if(window.confirm(`${blogObject.title} is already added to phonebook, replace the old number with the new one?`)){
           blogService
-          .update(duplicated.id, newItem)
+          .update(duplicated.id, blogObject)
           .then(response => {
             setNotification({
-              text: `Changed ${newBlogTitle}`,
+              text: `Changed ${blogObject.title}`,
               type: 'notification'
             })
             setTimeout(() => {
@@ -103,20 +93,17 @@ const App = () => {
         }
       } else {
         blogService
-            .create(newItem)
+            .create(blogObject)
             .then(response => {
               setNotification({
-                text: `A new ${newBlogTitle} blog of ${newBlogAuthor} has been added`,
+                text: `A new ${blogObject.title} blog of ${blogObject.author} has been added`,
                 type: 'notification'
               })
               setTimeout(() => {
                 setNotification(null)
               }, 5000);
               setBlogs([...blogs, response])
-              setBlogTitle('')
-              setBlogAuthor('')
-              setBlogUrl('')
-              setBlogLikes('')
+              
             }).catch(error => {
               console.error(error.response.data.error);
               setNotification({
@@ -141,7 +128,9 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       {user ?
-        <BlogsSection blogs={blogs} user={user} notification={notification} addBlog={addBlog} newBlogTitle={newBlogTitle}  handleBlogTitleChange={setBlogTitle} newBlogAuthor={newBlogAuthor} handleBlogAuthorChange={setBlogAuthor} newBlogUrl={newBlogUrl} handleBlogUrlChange={setBlogUrl} newBlogLikes={newBlogLikes} handleBlogLikesChange={setBlogLikes} logout={logout} /> :
+        <BlogsSection blogs={blogs} user={user} notification={notification} logout={logout}>
+          <BlogForm createBlog={addBlog} />
+        </BlogsSection> :
         <LoginForm notification={notification} handleLogin={handleLogin} username={username} setUsername={setUsername} password={password} setPassword={setPassword}/>
       }
     </div>
