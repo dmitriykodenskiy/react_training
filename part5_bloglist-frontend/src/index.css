@@ -39,3 +39,41 @@ label{
 form{
   margin: 20px 0;
 }
+button{
+  cursor: pointer;
+}
+.blog_title_wrapper{
+  display: flex;
+  align-items: center;
+}
+.blog_title, .blog_author_label, .blog_url_label, .blog_likes_label, .blog_user_label{
+  margin-right: 10px;
+}
+.blog_info{
+  display: none;
+}
+.expanded .blog_info{
+  display: block;
+}
+.blog_single{
+  margin: 5px 0;
+  padding: 10px;
+  border: 1px solid #000;
+  min-width: 300px;
+}
+.blog_title_wrapper{
+  display: flex;
+  justify-content: space-between;
+}
+.blogs_list{
+  margin-top: 10px;
+  display: inline-flex;
+  flex-direction: column;
+}
+.blog_title{
+  font-weight: bold;
+}
+.like_btn{
+  margin-left: 10px;
+  display: inline-block;
+}

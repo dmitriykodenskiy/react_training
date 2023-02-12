@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import BlogsSection from './components/BlogsSection'
+import Togglable from './components/Togglable'
+import Notification from './components/Notification'
 
 
 const App = () => {
@@ -27,6 +29,8 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  const blogFormRef = useRef()
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -80,6 +84,7 @@ const App = () => {
               setNotification(null)
             }, 5000);
             setBlogs(blogs.map(item => item.id === duplicated.id ? response : item))
+            blogFormRef.current.toggleVisibility()
           }).catch(error => {
             console.error(error.response.data.error);
             setNotification({
@@ -103,7 +108,7 @@ const App = () => {
                 setNotification(null)
               }, 5000);
               setBlogs([...blogs, response])
-              
+              blogFormRef.current.toggleVisibility()
             }).catch(error => {
               console.error(error.response.data.error);
               setNotification({
@@ -117,6 +122,19 @@ const App = () => {
       }
     }
   }
+  
+  const addLike = (event, blogItem) => {
+    event.preventDefault()
+    const newLikesValue = blogItem.likes + 1
+    const updatedBlog = {...blogItem, likes: newLikesValue, user: blogItem.user.id}
+    console.log(blogItem);
+    blogService.update(blogItem.id, updatedBlog)
+      .then(blog => {
+        const updatedBlogs = blogs.map(blogItem => blogItem.id === updatedBlog.id ? updatedBlog : blogItem)
+        setBlogs(updatedBlogs)
+      })
+      
+  }
 
   const logout = (event) => {
     event.preventDefault()
@@ -128,9 +146,13 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       {user ?
-        <BlogsSection blogs={blogs} user={user} notification={notification} logout={logout}>
-          <BlogForm createBlog={addBlog} />
-        </BlogsSection> :
+        <section>
+          <Notification message={notification} />
+          <Togglable buttonLabel='New Blog' user={user} logout={logout} notification={notification} ref={blogFormRef}>
+            <BlogForm createBlog={addBlog} />
+          </Togglable> 
+          <BlogsSection blogs={blogs} notification={notification} addLike={addLike}/>
+        </section> :
         <LoginForm notification={notification} handleLogin={handleLogin} username={username} setUsername={setUsername} password={password} setPassword={setPassword}/>
       }
     </div>
