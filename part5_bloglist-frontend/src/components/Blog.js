@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const Blog = ({blog, addLike, removeBlog}) => {
+const Blog = ({blog, addLike, removeBlog, user}) => {
   const [visible, setVisible] = useState(false)
 
   const visiblityClass = visible ? 'expanded' : 'collapsed'
@@ -38,7 +38,10 @@ const Blog = ({blog, addLike, removeBlog}) => {
           </div> :
           ''
         }
-        <button className="remove_btn" onClick={(event) => removeBlog(event, blog)}>Remove</button>
+        {blog.user && blog.user.username === user.username &&
+          <button className="remove_btn" onClick={(event) => removeBlog(event, blog)}>Remove</button>
+        }
+        
       </div>
     </div> 
   )
