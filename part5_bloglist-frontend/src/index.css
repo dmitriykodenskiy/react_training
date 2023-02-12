@@ -77,3 +77,11 @@ button{
   margin-left: 10px;
   display: inline-block;
 }
+.remove_btn{
+  background-color: #3939c5;
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: #df9f9f;
+}

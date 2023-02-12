@@ -123,6 +123,18 @@ const App = () => {
     }
   }
   
+  const removeBlog = (event, blogItem) => {
+    event.preventDefault()
+    if(window.confirm(`${blogItem.title} is already added to phonebook, replace the old number with the new one?`) && blogItem.user && blogItem.user.username === user.username){
+      blogService.remove(blogItem.id)
+      .then(blog => {
+        const updatedBlogs = blogs.filter(blog => blogItem.id !== blog.id)
+        setBlogs(updatedBlogs)
+      })
+    }
+    
+  }
+
   const addLike = (event, blogItem) => {
     event.preventDefault()
     const newLikesValue = blogItem.likes + 1
@@ -151,7 +163,7 @@ const App = () => {
           <Togglable buttonLabel='New Blog' user={user} logout={logout} notification={notification} ref={blogFormRef}>
             <BlogForm createBlog={addBlog} />
           </Togglable> 
-          <BlogsSection blogs={blogs} notification={notification} addLike={addLike}/>
+          <BlogsSection blogs={blogs} notification={notification} addLike={addLike} removeBlog={removeBlog}/>
         </section> :
         <LoginForm notification={notification} handleLogin={handleLogin} username={username} setUsername={setUsername} password={password} setPassword={setPassword}/>
       }
