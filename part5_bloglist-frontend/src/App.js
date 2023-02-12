@@ -126,9 +126,9 @@ const App = () => {
   const addLike = (event, blogItem) => {
     event.preventDefault()
     const newLikesValue = blogItem.likes + 1
-    const updatedBlog = {...blogItem, likes: newLikesValue, user: blogItem.user.id}
-    console.log(blogItem);
-    blogService.update(blogItem.id, updatedBlog)
+    const updatedBlog = {...blogItem, likes: newLikesValue}
+    const blogToPut = {...updatedBlog, user: blogItem.user?.id}
+    blogService.update(blogItem.id, blogToPut)
       .then(blog => {
         const updatedBlogs = blogs.map(blogItem => blogItem.id === updatedBlog.id ? updatedBlog : blogItem)
         setBlogs(updatedBlogs)
