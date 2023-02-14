@@ -1,12 +1,14 @@
 import Button from './Button'
+import { useSelector } from 'react-redux'
 
-const Feedback = ({title, good, neutral, bad, handleClick}) => {
+const Feedback = ({title}) => {
+    const feedbacks = useSelector(state => state)
     return (
       <div className='feedback_container'>
         <h2>{title}</h2>
-        <Button title={good.name} handleClick={handleClick} />
-        <Button title={neutral.name} handleClick={handleClick} />
-        <Button title={bad.name} handleClick={handleClick} />
+        {feedbacks.map((feedback, index) => 
+            <Button title={feedback.name} key={index}/>
+        )}
       </div>
     )
 }

@@ -1,17 +1,19 @@
 import StatisticsItem from './StatisticsItem'
+import { useSelector } from 'react-redux'
 
-const Statistics = ({title, good, neutral, bad}) => {
+const Statistics = ({title}) => {
+    const feedbacks = useSelector(state => state)
     const total = {
       title: 'All',
       count: function() {
-        const countTotal = () => good.value + neutral.value + bad.value;
+        const countTotal = () => feedbacks.reduce((acc, item) => acc + item.value, 0);
         return countTotal();
       }
     }
     const avarage = {
       title: 'Avarage',
       count: function() {
-        const countTotal = () => good.value + neutral.value + bad.value;
+        const countTotal = () => feedbacks.reduce((acc, item) => acc + item.value, 0);
         return (countTotal() / 3).toFixed(2);
       }
     }
@@ -19,8 +21,9 @@ const Statistics = ({title, good, neutral, bad}) => {
     const positivePercentage = {
       title: 'Positive',
       count: function() {
-        const countTotal = () => good.value + neutral.value + bad.value;
-        return countTotal() ? ((good.value / countTotal() * 100).toFixed(2)) + '%' : 0;
+        const countTotal = () => feedbacks.reduce((acc, item) => acc + item.value, 0);
+        const goodFeedback = feedbacks.filter(item => item.name === 'good')[0]
+        return countTotal() ? ((goodFeedback.value / countTotal() * 100).toFixed(2)) + '%' : 0;
       }
     }
     if (total.count() > 0) {
@@ -28,12 +31,12 @@ const Statistics = ({title, good, neutral, bad}) => {
         <div className='statistics_container'>
           <h2>{title}</h2>
           <ul className='statistics_list'>
-            <StatisticsItem feedbackType={good} />
-            <StatisticsItem feedbackType={neutral} />
-            <StatisticsItem feedbackType={bad} />
-            <StatisticsItem meta={total} />
-            <StatisticsItem meta={avarage} />
-            <StatisticsItem meta={positivePercentage} />
+            {feedbacks.map((feedback, index) => 
+                <StatisticsItem feedback={feedback} key={index}/>
+            )}
+            <StatisticsItem meta={total} key={feedbacks.length + 1}/>
+            <StatisticsItem meta={avarage} key={feedbacks.length + 2}/>
+            <StatisticsItem meta={positivePercentage} key={feedbacks.length + 3}/>
           </ul>
         </div>
       )

@@ -1,9 +1,9 @@
-const StatisticsItem = ({feedbackType, meta}) => {
-    if (feedbackType) {
+const StatisticsItem = ({feedback, meta}) => {
+    if (feedback) {
       return(
         <li className='statistics_item'>
-          <span className='statistics_item_name'>{feedbackType.name}</span>&nbsp;&nbsp;
-          <span className='statistics_item_value'>{feedbackType.value}</span>
+          <span className='statistics_item_name'>{feedback.name}</span>&nbsp;&nbsp;
+          <span className='statistics_item_value'>{feedback.value}</span>
         </li>
       )
     } else if (meta) {

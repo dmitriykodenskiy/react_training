@@ -2,11 +2,20 @@ import deepFreeze from 'deep-freeze'
 import counterReducer from './reducer'
 
 describe('unicafe reducer', () => {
-  const initialState = {
-    good: 0,
-    neutral: 0,
-    bad: 0
-  }
+  const initialState = [
+    {
+        name: 'good',
+        value: 0
+    },
+    {
+        name: 'neutral',
+        value: 0
+    },
+    {
+        name: 'bad',
+        value: 0
+    },
+]
 
   test('should return a proper initial state when called with undefined state', () => {
     const action = {
@@ -25,11 +34,20 @@ describe('unicafe reducer', () => {
 
     deepFreeze(state)
     const newState = counterReducer(state, action)
-    expect(newState).toEqual({
-      good: 1,
-      neutral: 0,
-      bad: 0
-    })
+    expect(newState).toEqual([
+      {
+          name: 'good',
+          value: 1
+      },
+      {
+          name: 'neutral',
+          value: 0
+      },
+      {
+          name: 'bad',
+          value: 0
+      },
+    ])
   })
   
   test('neutral is incremented', () => {
@@ -40,11 +58,20 @@ describe('unicafe reducer', () => {
 
     deepFreeze(state)
     const newState = counterReducer(state, action)
-    expect(newState).toEqual({
-      good: 0,
-      neutral: 1,
-      bad: 0
-    })
+    expect(newState).toEqual([
+      {
+          name: 'good',
+          value: 0
+      },
+      {
+          name: 'neutral',
+          value: 1
+      },
+      {
+          name: 'bad',
+          value: 0
+      },
+    ])
   })
   
   test('bad is incremented', () => {
@@ -55,11 +82,20 @@ describe('unicafe reducer', () => {
 
     deepFreeze(state)
     const newState = counterReducer(state, action)
-    expect(newState).toEqual({
-      good: 0,
-      neutral: 0,
-      bad: 1
-    })
+    expect(newState).toEqual([
+      {
+          name: 'good',
+          value: 0
+      },
+      {
+          name: 'neutral',
+          value: 0
+      },
+      {
+          name: 'bad',
+          value: 1
+      },
+    ])
   })
   
   test('stats reset', () => {
@@ -70,10 +106,19 @@ describe('unicafe reducer', () => {
 
     deepFreeze(state)
     const newState = counterReducer(state, action)
-    expect(newState).toEqual({
-      good: 0,
-      neutral: 0,
-      bad: 0
-    })
+    expect(newState).toEqual([
+      {
+          name: 'good',
+          value: 0
+      },
+      {
+          name: 'neutral',
+          value: 0
+      },
+      {
+          name: 'bad',
+          value: 0
+      },
+    ])
   })
 })
