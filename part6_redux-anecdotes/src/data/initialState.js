@@ -7,12 +7,21 @@ const anecdotesAtStart = [
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
 ]
 
-const getId = () => (100000 * Math.random()).toFixed(0)
+const idArray = []
+const getIds = () => {
+    const id = (10000 * Math.random() + 1).toFixed(0)
+    if (!idArray.includes(id)) {
+        idArray.push(id)
+    } else {
+        getIds()
+    }
+}
+anecdotesAtStart.forEach(getIds);
 
-const asObject = (anecdote) => {
+const asObject = (anecdote, index) => {
     return {
         content: anecdote,
-        id: getId(),
+        id: idArray[index],
         votes: 0
     }
 }

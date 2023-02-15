@@ -7,9 +7,8 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'INCREMENT':
       return state.map(item => item.id === action.payload.id ? {...item, votes: item.votes + 1} : item)
-    // case 'ADD NEW':
-
-    //   break;
+    case 'ADD NEW':
+      return [...state, action.payload]
   
     default:
       break;

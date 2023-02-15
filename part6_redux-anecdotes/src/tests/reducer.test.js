@@ -38,5 +38,37 @@ describe('anecdotes reducer', () => {
     ])
   })
   
+  test('add new anecdote', () => {
+    const action = {
+      type: 'ADD NEW',
+      payload: {
+        content: 'new joke',
+        id: 2,
+        votes: 0
+      }
+    }
+    const state = [
+      {
+        content: 'If it hurts, do it more often',
+        id: 1,
+        votes: 0
+      }
+    ]
+
+    deepFreeze(state)
+    const newState = counterReducer(state, action)
+    expect(newState).toEqual([
+      {
+        content: 'If it hurts, do it more often',
+        id: 1,
+        votes: 0
+      },
+      {
+        content: 'new joke',
+        id: 2,
+        votes: 0
+      }
+    ])
+  })
   
 })
