@@ -8,7 +8,6 @@ const App = () => {
     <div>
       <h2>Anecdotes</h2>
       <AnecdotesList/>
-      <h2>create new</h2>
       <AnecdoteForm/>
     </div>
   )
