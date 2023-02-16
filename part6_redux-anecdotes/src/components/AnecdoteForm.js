@@ -12,7 +12,7 @@ const generateId = (idsArray) => {
 
 const AnecdoteForm = () => {
     const dispatch = useDispatch()
-    const anecdoteIds = useSelector(state => state.map(anecdote => anecdote.id))
+    const anecdoteIds = useSelector(state => state.anecdotes.map(anecdote => anecdote.id))
     const addNew = (event) => {
         event.preventDefault()
         const content = event.target.anecdote.value
