@@ -1,4 +1,4 @@
-import { filterBySearch } from '../reducers/filterReducer'
+import { search } from '../reducers/filterReducer'
 import { useDispatch } from 'react-redux'
 
 const Filter = () => {
@@ -9,7 +9,7 @@ const Filter = () => {
   
     const handleChange = (event) => {
         event.preventDefault()
-        dispatch(filterBySearch(event.target.value))
+        dispatch(search(event.target.value))
     }
     return (
       <div style={style}>
