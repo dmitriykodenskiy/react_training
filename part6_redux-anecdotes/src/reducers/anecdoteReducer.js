@@ -1,34 +1,18 @@
 import initialState from '../data/initialState'
+import { createSlice } from '@reduxjs/toolkit'
 
-export const increaseLikes = (id) => {
-  return {type: 'INCREMENT', payload: {id: id}}
-}
-
-export const addAnecdote = (id, content) => {
-  return {
-    type: 'ADD NEW',
-    payload: {
-        content,
-        id: id,
-        votes: 0
-    }
-}
-}
-
-const reducer = (state = initialState, action) => {
-  console.log('state now: ', state)
-  // console.log('action', action)
-
-  switch (action.type) {
-    case 'INCREMENT':
-      return state.map(item => item.id === action.payload.id ? {...item, votes: item.votes + 1} : item)
-    case 'ADD NEW':
+const anecdoteSlice = createSlice({
+  name: 'anecdote',
+  initialState: initialState,
+  reducers: {
+    increaseLikes(state, action) {
+      return state.map(item => item.id === action.payload ? {...item, votes: item.votes + 1} : item)
+    },
+    addAnecdote(state, action) {
       return [...state, action.payload]
-  
-    default:
-      break;
+    }
   }
-  return state
-}
+})
 
-export default reducer
+export const { increaseLikes, addAnecdote } = anecdoteSlice.actions
+export default anecdoteSlice.reducer

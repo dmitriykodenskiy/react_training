@@ -17,7 +17,7 @@ const AnecdoteForm = () => {
         event.preventDefault()
         const content = event.target.anecdote.value
         event.target.anecdote.value = ''
-        dispatch(addAnecdote(generateId(anecdoteIds), content))
+        dispatch(addAnecdote({content, id: generateId(anecdoteIds), votes: 0}))
     }
     return(
         <div>

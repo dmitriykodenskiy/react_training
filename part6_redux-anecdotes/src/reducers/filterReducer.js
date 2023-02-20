@@ -6,7 +6,7 @@ const filterSlice = createSlice({
   reducers: {
     search(state, action) {
       const searchPhrase = action.payload
-      return searchPhrase ? searchPhrase : state
+      return searchPhrase || searchPhrase === '' ? searchPhrase : state
     }
   }
 })

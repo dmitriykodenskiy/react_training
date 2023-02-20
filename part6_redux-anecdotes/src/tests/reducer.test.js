@@ -14,10 +14,8 @@ describe('anecdotes reducer', () => {
 
   test('review is incremented', () => {
     const action = {
-      type: 'INCREMENT',
-      payload: {
-        id: 1
-      }
+      type: 'anecdote/increaseLikes',
+      payload: 1
     }
     const state = [
       {
@@ -40,7 +38,7 @@ describe('anecdotes reducer', () => {
   
   test('add new anecdote', () => {
     const action = {
-      type: 'ADD NEW',
+      type: 'anecdote/addAnecdote',
       payload: {
         content: 'new joke',
         id: 2,
