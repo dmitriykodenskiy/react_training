@@ -28,9 +28,17 @@ export const initializeAnecdotes = () => {
 }
 
 export const createAnecdote = content => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     const newAnecdote = await anecdoteService.createNew(content)
     dispatch(addAnecdote(newAnecdote))
+  }
+}
+
+export const addLike = id => {
+  return async (dispatch, getState) => {
+    await dispatch(increaseLikes(id))
+    const likedAnecdote = getState().anecdotes.find(anecdote => anecdote.id === id)
+    anecdoteService.updateLikes(id, likedAnecdote)
   }
 }
 
