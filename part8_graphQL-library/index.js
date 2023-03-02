@@ -137,10 +137,14 @@ const resolvers = {
                     [item]: (acc[item] || 0) + 1
                 }
             }, {})
-        const result = []
+        let result = []
         for (const author in authorsBooks) {
             result.push({name: author, bookCount: authorsBooks[author]})
         }
+        result = result.map(item => {
+          const matchingAuthor = authors.find(author => author.name === item.name)
+          return {...item, born: matchingAuthor.born}
+        })
         return result
     }
   },
