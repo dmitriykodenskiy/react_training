@@ -9,7 +9,6 @@ const App = () => {
   return (
     <div>
       <Menu />
-
       <Routes>
         <Route path='/' element={<Authors/>} />
         <Route path='/books' element={<Books/>} />

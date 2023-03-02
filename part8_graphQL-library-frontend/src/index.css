@@ -1,0 +1,13 @@
+a{
+    padding: 5px 10px;
+    background-color: #a8eef1;
+    border-radius: 5px;
+    margin-right: 5px;
+    text-decoration: none;
+}
+a:hover{
+    background-color: #92d8db;
+}
+.menu{
+    margin: 20px 0;
+}
