@@ -140,6 +140,7 @@ const resolvers = {
         let result = []
         for (const author in authorsBooks) {
             result.push({name: author, bookCount: authorsBooks[author]})
+            authors = authors.map(item => item.name === author ? {...item, bookCount: authorsBooks[author]} : item)
         }
         result = result.map(item => {
           const matchingAuthor = authors.find(author => author.name === item.name)
@@ -155,13 +156,13 @@ const resolvers = {
       return book
     },
     editAuthor: (root, args) => {
-      const editedAuthorIndex = authors.findIndex(author => args.name === author.name)
-      if (editedAuthorIndex === -1) {
+      const editedAuthor = authors.find(author => args.name === author.name)
+      if (!editedAuthor) {
         return null
       }
-      const editedAuthor = {...authors[editedAuthorIndex], born: args.setBornTo}
-      authors[editedAuthorIndex] = editedAuthor
-      return editedAuthor
+      const updatedAuthor = {...editedAuthor, born: args.setBornTo}
+      authors = authors.map(author => args.name === author.name ? updatedAuthor : author)
+      return updatedAuthor
     }
   }
 }

@@ -10,7 +10,7 @@ const Authors = (props) => {
     return <div>No authors found</div>
   }
 
-  const authors = [...result.data.allAuthors]
+  let authors = [...result.data.allAuthors]
 
   return (
     <div>
