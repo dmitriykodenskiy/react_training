@@ -143,7 +143,7 @@ const resolvers = {
         }
         result = result.map(item => {
           const matchingAuthor = authors.find(author => author.name === item.name)
-          return {...item, born: matchingAuthor.born}
+          return {...item, born: matchingAuthor?.born}
         })
         return result
     }
