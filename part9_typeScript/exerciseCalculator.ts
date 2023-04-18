@@ -8,13 +8,25 @@ interface TrainingValues {
     average: number;
 }
 
+const parseArguments = (args: string[]): number[] => {
+    if (args.length < 4) throw new Error('Not enough arguments');
+  
+    const argsSliced = args.slice(2).map(item => Number(item))
+    
+    if (argsSliced.includes(NaN)) {
+        throw new Error('Provided values were not numbers!');
+    } else {
+        return argsSliced
+    }
+}
+
 const calculateExercises = (args: number[]): TrainingValues => {
     const periodLength = args.length
     const trainingDays = args.filter(item => item).length
     const average = args.reduce((sum, elem) => sum + elem)/args.length
     const success = average >= 2 ? true : false
     const rating = average >= 2 ? 3 : average < 1 ? 1 : 2
-    let ratingDescription
+    let ratingDescription = 'No rating available'
     switch (rating) {
         case 3:
             ratingDescription = 'Excellent'
@@ -40,4 +52,14 @@ const calculateExercises = (args: number[]): TrainingValues => {
     }
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1]))
+try {
+    const array = parseArguments(process.argv);
+    console.log(calculateExercises(array));
+  } catch (error: unknown) {
+    let errorMessage = 'Something bad happened.'
+    if (error instanceof Error) {
+      errorMessage += ' Error: ' + error.message;
+    }
+    console.log(errorMessage);
+}
+export default calculateExercises
