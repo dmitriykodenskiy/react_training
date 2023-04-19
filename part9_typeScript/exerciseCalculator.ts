@@ -11,31 +11,31 @@ interface TrainingValues {
 const parseArguments = (args: string[]): number[] => {
     if (args.length < 4) throw new Error('Not enough arguments');
   
-    const argsSliced = args.slice(2).map(item => Number(item))
+    const argsSliced = args.slice(2).map(item => Number(item));
     
     if (argsSliced.includes(NaN)) {
         throw new Error('Provided values were not numbers!');
     } else {
-        return argsSliced
+        return argsSliced;
     }
-}
+};
 
-const calculateExercises = (args: number[]): TrainingValues => {
-    const periodLength = args.length
-    const trainingDays = args.filter(item => item).length
-    const average = args.reduce((sum, elem) => sum + elem)/args.length
-    const success = average >= 2 ? true : false
-    const rating = average >= 2 ? 3 : average < 1 ? 1 : 2
-    let ratingDescription = 'No rating available'
+const calculateExercises = (args: number[], target: number): TrainingValues => {
+    const periodLength = args.length;
+    const trainingDays = args.filter(item => item).length;
+    const average = args.reduce((sum, elem) => sum + elem)/args.length;
+    const success = average >= 2 ? true : false;
+    const rating = average >= 2 ? 3 : average < 1 ? 1 : 2;
+    let ratingDescription = 'No rating available';
     switch (rating) {
         case 3:
-            ratingDescription = 'Excellent'
+            ratingDescription = 'Excellent';
             break;
         case 2:
-            ratingDescription = 'Not too bad but could be better'
+            ratingDescription = 'Not too bad but could be better';
             break;
         case 1:
-            ratingDescription = 'Bad'
+            ratingDescription = 'Bad';
             break;
     
         default:
@@ -47,19 +47,19 @@ const calculateExercises = (args: number[]): TrainingValues => {
         success: success,
         rating: rating,
         ratingDescription: ratingDescription,
-        target: 2,
+        target: target,
         average: average
-    }
-}
+    };
+};
 
 try {
     const array = parseArguments(process.argv);
-    console.log(calculateExercises(array));
+    console.log(calculateExercises(array, 2.5));
   } catch (error: unknown) {
-    let errorMessage = 'Something bad happened.'
+    let errorMessage = 'Something bad happened.';
     if (error instanceof Error) {
       errorMessage += ' Error: ' + error.message;
     }
     console.log(errorMessage);
 }
-export default calculateExercises
+export default calculateExercises;
